@@ -2,11 +2,15 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Stack;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
-
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class informationProcessing {
     public static void main(String[] args) {
@@ -15,6 +19,31 @@ public class informationProcessing {
         double result = evaluate(arithmeticOperations);
         writerToFile(fileOut, result);  // simple method
         //writerToFile(fileOut, believesWithLib(arithmeticOperations));  //include lib
+        try {
+            archiveFileZip(fileOut, "arch.zip");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void unzipFile(String archiveName){
+
+    }
+
+    public static void archiveFileZip(String fileName, String archiveName) throws IOException {
+        try (FileOutputStream fos = new FileOutputStream(archiveName);
+             ZipOutputStream zos = new ZipOutputStream(fos);
+             FileInputStream fis = new FileInputStream(fileName)) {
+            ZipEntry zipEntry = new ZipEntry(new File(fileName).getName());
+            zos.putNextEntry(zipEntry);
+
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = fis.read(buffer)) >= 0) {
+                zos.write(buffer, 0, length);
+            }
+            zos.closeEntry();
+        }
     }
 
     public static double believesWithLib(String arithmetic){
