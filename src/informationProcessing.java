@@ -8,6 +8,7 @@ public class informationProcessing {
 
         operation.readerFromFile(fileIn);
         operation.evaluate();
+        operation.evaluateWithRegular();
         //operation.believesWithLib();
         operation.writerToFile(fileOut);
 
