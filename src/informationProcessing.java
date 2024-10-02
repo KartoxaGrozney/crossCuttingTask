@@ -14,6 +14,8 @@ public class informationProcessing {
         try {
             AuxiliaryАunctions.archiveFileZip(fileOut, "arch.zip");
             AuxiliaryАunctions.unzipFile("arch.zip");
+            AuxiliaryАunctions.createRar("archiv.rar", fileOut);
+            AuxiliaryАunctions.unrarFile("archiv.rar", "extractedRar");
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,4 +1,6 @@
 import java.io.File;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -27,7 +29,7 @@ public class AuxiliaryАunctions {
         // Получаем путь к папке проекта
         String projectDir = System.getProperty("user.dir");
         File zipFile = new File(projectDir, zipFileName);
-        File destDirectory = new File(projectDir, "extracted"); // Папка для разархивации
+        File destDirectory = new File(projectDir, "extractedZip"); // Папка для разархивации
 
         if (!zipFile.exists()) {
             System.out.println("Файл не найден: " + zipFile.getAbsolutePath());
@@ -64,6 +66,29 @@ public class AuxiliaryАunctions {
             System.out.println("Разархивация завершена в папку: " + destDirectory.getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void createRar(String rarFileName, String fileToArchive) {
+        try {
+            Runtime.getRuntime().exec(new String[] {"C:\\Soft\\WinRar\\Rar.exe", "a", rarFileName, fileToArchive});
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void unrarFile(String rarFileName, String outputDirectory) {
+        try {
+            File outputFolder = new File(outputDirectory);
+            if (!outputFolder.exists()) {
+                outputFolder.mkdirs();
+            }
+            String currentDirectory = outputFolder.getCanonicalPath();
+            Runtime.getRuntime().exec(new String[] {"C:\\Soft\\WinRar\\UnRAR.exe", "e", rarFileName, currentDirectory});
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 }
