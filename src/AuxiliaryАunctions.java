@@ -1,6 +1,6 @@
+import javax.crypto.*;
 import java.io.File;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.security.NoSuchAlgorithmException;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -89,6 +89,44 @@ public class AuxiliaryАunctions {
         }
         catch (Exception e) {
             System.out.println(e.getMessage());
+        }
+    }
+
+    public static SecretKey generateKey() throws NoSuchAlgorithmException {
+        KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+        keyGen.init(128); // длина ключа
+        return keyGen.generateKey();
+    }
+
+    public static void encryptFile(String filePath, SecretKey key) throws Exception {
+        Cipher cipher = Cipher.getInstance("AES");
+        cipher.init(Cipher.ENCRYPT_MODE, key);
+
+        try (FileInputStream fis = new FileInputStream(filePath);
+             FileOutputStream fos = new FileOutputStream(filePath + ".enc");
+             CipherOutputStream cos = new CipherOutputStream(fos, cipher)) {
+
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = fis.read(buffer)) != -1) {
+                cos.write(buffer, 0, bytesRead);
+            }
+        }
+    }
+
+    public static void decryptFile(String filePath, SecretKey key) throws Exception {
+        Cipher cipher = Cipher.getInstance("AES");
+        cipher.init(Cipher.DECRYPT_MODE, key);
+
+        try (FileInputStream fis = new FileInputStream(filePath);
+             CipherInputStream cis = new CipherInputStream(fis, cipher);
+             FileOutputStream fos = new FileOutputStream(filePath.replace(".enc", ".dec"))) {
+
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = cis.read(buffer)) != -1) {
+                fos.write(buffer, 0, bytesRead);
+            }
         }
     }
 }
