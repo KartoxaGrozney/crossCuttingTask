@@ -6,8 +6,13 @@ import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 
 public class MathematicalExpression {
-    String str = "";
-    double rez;
+    private static String str = "";
+    private static double rez;
+
+
+    public double getResExp(){
+        return rez;
+    }
 
     public void readerFromFile(String fileIn){
         BufferedReader reader;

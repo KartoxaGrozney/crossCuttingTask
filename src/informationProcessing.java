@@ -3,15 +3,40 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
 public class informationProcessing {
-    public static void main(String[] args) {
-        String fileOut = "output.txt", fileIn = "input.txt";
+    private static String fileOut = "output.";
+    private static String fileIn = "input.";
+    private static double expValue;
 
+    public static void setFileName(String inpFile, String outFile){
+        fileIn += inpFile;
+        fileOut += outFile;
+    }
+
+    public static void setExpValue(double expValueNew){
+        expValue = expValueNew;
+    }
+
+    public static double getExpValue(){
+        return expValue;
+    }
+
+    public static String getFileIn(){
+        return fileIn;
+    }
+
+    public static String getFileOut(){
+        return fileOut;
+    }
+
+    public static void mainFoo() {
         MathematicalExpression operation = new MathematicalExpression();
 
         operation.readerFromFile(fileIn);
         operation.evaluate();
+
         //operation.evaluateWithRegular();
         //operation.believesWithLib();
+        setExpValue(operation.getResExp());
         operation.writerToFile(fileOut);
 
         try {
