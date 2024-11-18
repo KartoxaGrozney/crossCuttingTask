@@ -21,6 +21,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.yaml.snakeyaml.Yaml;
 import com.google.protobuf.InvalidProtocolBufferException;
+import org.yaml.snakeyaml.Yaml;
+
+import java.util.Map;
 
 public class MathematicalExpression {
     private static String str = "";
@@ -120,13 +123,17 @@ public class MathematicalExpression {
         }
     }
 
-    public void readerFromYAML(String fileIn) {
-        Yaml yaml = new Yaml();
-        try (InputStream inputStream = new FileInputStream(new File(fileIn))) {
-            Map<String, Object> data = (Map<String, Object>) yaml.load(inputStream);
-            System.out.println(data);
-        } catch (IOException e) {
+    public void readerFromYAML(String filename) {
+        try (InputStream inputStream = new FileInputStream(filename)) {
+            Yaml yaml = new Yaml();
+            Map<String, String> data = (Map<String, String>) yaml.load(inputStream); // Загружаем данные из YAML
+
+            // Получаем выражение из ключа "expr"
+            str = data.get("expr").trim();
+
+        } catch (Exception e) {
             e.printStackTrace();
+            str = "Ошибка при чтении файла.";
         }
     }
 
