@@ -1,9 +1,23 @@
 import java.io.*;
+import java.util.Map;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
+
+import javax.xml.parsers.*;
+
+import org.w3c.dom.Document; // Использование полного имени
+import org.jsoup.Jsoup;
+import javax.xml.parsers.DocumentBuilder; // Для создания W3C Document
+import javax.xml.parsers.DocumentBuilderFactory; // Для создания W3C Document
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.yaml.snakeyaml.Yaml;
+import com.google.protobuf.InvalidProtocolBufferException;
 
 public class MathematicalExpression {
     private static String str = "";
@@ -27,6 +41,76 @@ public class MathematicalExpression {
             e.printStackTrace();
         }
     }
+
+    public void readXmlFile(String filename) {
+        try {
+            // Создание фабрики и построителя документа
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+
+            // Парсинг XML файла
+            Document document = builder.parse(new File(filename));
+            document.getDocumentElement().normalize();
+
+            // Получение корневого элемента
+            Element root = document.getDocumentElement();
+            str = parseExpression(root); // Получаем выражение из элемента
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            str = "Ошибка при чтении файла.";
+        }
+    }
+
+    private String parseExpression(Element root) {
+        // Получаем текстовое содержимое элемента <expr>
+        Element exprElement = (Element) root.getElementsByTagName("expr").item(0);
+        return exprElement.getTextContent().trim(); // Возвращаем строку с выражением
+    }
+
+    public String getResult() {
+        return str;
+    }
+
+    public void parseHtml(String htmlFile) {
+        try {
+            // Используем Jsoup Document
+            org.jsoup.nodes.Document htmlDoc = Jsoup.parse(new File(htmlFile), "UTF-8");
+            // Обработка htmlDoc
+            System.out.println("Parsed HTML Document: " + htmlDoc.title());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void readerFromJSON(String fileIn) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            Map<String, Object> map = objectMapper.readValue(new File(fileIn), Map.class);
+            System.out.println(map);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void readerFromYAML(String fileIn) {
+        Yaml yaml = new Yaml();
+        try (InputStream inputStream = new FileInputStream(new File(fileIn))) {
+            Map<String, Object> data = (Map<String, Object>) yaml.load(inputStream);
+            System.out.println(data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+//    public void readerFromProtobuf(String fileIn) {
+//        try (FileInputStream input = new FileInputStream(fileIn)) {
+//            MyProtoMessage message = MyProtoMessage.parseFrom(input);
+//            System.out.println(message);
+//        } catch (IOException | InvalidProtocolBufferException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     public void writerToFile(String fileName){
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {

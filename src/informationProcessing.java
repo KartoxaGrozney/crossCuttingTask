@@ -31,7 +31,21 @@ public class informationProcessing {
     public static void mainFoo() {
         MathematicalExpression operation = new MathematicalExpression();
 
-        operation.readerFromFile(fileIn);
+        if(fileIn.equals("input.txt")) {
+            operation.readerFromFile(fileIn);
+        }
+        else if(fileIn.equals("input.xml")) {
+            operation.readXmlFile(fileIn);
+        }
+        else if(fileIn.equals("input.html")) {
+            operation.parseHtml(fileIn);
+        }
+        else if(fileIn.equals("input.json")) {
+            operation.readerFromJSON(fileIn);
+        }
+        else if(fileIn.equals("input.yaml")) {
+            operation.readerFromYAML(fileIn);
+        }
         operation.evaluate();
 
         //operation.evaluateWithRegular();
