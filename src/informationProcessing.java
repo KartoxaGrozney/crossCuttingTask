@@ -38,7 +38,7 @@ public class informationProcessing {
             operation.readXmlFile(fileIn);
         }
         else if(fileIn.equals("input.html")) {
-            operation.parseHtml(fileIn);
+            operation.readHtmlFile(fileIn);
         }
         else if(fileIn.equals("input.json")) {
             operation.readerFromJSON(fileIn);

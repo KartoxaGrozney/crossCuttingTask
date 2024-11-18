@@ -1,4 +1,6 @@
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Stack;
 import java.util.regex.Matcher;
@@ -9,6 +11,7 @@ import net.objecthunter.exp4j.ExpressionBuilder;
 
 import javax.xml.parsers.*;
 
+import org.json.JSONObject;
 import org.w3c.dom.Document; // Использование полного имени
 import org.jsoup.Jsoup;
 import javax.xml.parsers.DocumentBuilder; // Для создания W3C Document
@@ -54,7 +57,7 @@ public class MathematicalExpression {
 
             // Получение корневого элемента
             Element root = document.getDocumentElement();
-            str = parseExpression(root); // Получаем выражение из элемента
+            str = parseExpressionXml(root); // Получаем выражение из элемента
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -62,7 +65,7 @@ public class MathematicalExpression {
         }
     }
 
-    private String parseExpression(Element root) {
+    private String parseExpressionXml(Element root) {
         // Получаем текстовое содержимое элемента <expr>
         Element exprElement = (Element) root.getElementsByTagName("expr").item(0);
         return exprElement.getTextContent().trim(); // Возвращаем строку с выражением
@@ -72,26 +75,37 @@ public class MathematicalExpression {
         return str;
     }
 
-    public void parseHtml(String htmlFile) {
+    public void readHtmlFile(String filename) {
         try {
-            // Используем Jsoup Document
-            org.jsoup.nodes.Document htmlDoc = Jsoup.parse(new File(htmlFile), "UTF-8");
-            // Обработка htmlDoc
-            System.out.println("Parsed HTML Document: " + htmlDoc.title());
-        } catch (IOException e) {
+            // Создание фабрики и построителя документа
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+
+            // Парсинг HTML файла
+            Document document = builder.parse(new File(filename));
+            document.getDocumentElement().normalize();
+
+            // Получение корневого элемента
+            Element root = document.getDocumentElement();
+            str = parseExpressionHTML(root); // Получаем выражение из элемента <expr>
+
+        } catch (Exception e) {
             e.printStackTrace();
+            str = "Ошибка при чтении файла.";
         }
     }
 
-    public void readerFromJSON(String fileIn) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            Map<String, Object> map = objectMapper.readValue(new File(fileIn), Map.class);
-            System.out.println(map);
-        } catch (IOException e) {
-            e.printStackTrace();
+    private String parseExpressionHTML(Element root) {
+        // Получаем текстовое содержимое элемента <expr>
+        NodeList exprList = root.getElementsByTagName("expr");
+        if (exprList.getLength() > 0) {
+            Element exprElement = (Element) exprList.item(0);
+            return exprElement.getTextContent().trim(); // Возвращаем строку с выражением
         }
+        return ""; // Если элемент <expr> не найден
     }
+
+
 
     public void readerFromYAML(String fileIn) {
         Yaml yaml = new Yaml();
