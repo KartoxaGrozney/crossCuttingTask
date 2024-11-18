@@ -105,7 +105,20 @@ public class MathematicalExpression {
         return ""; // Если элемент <expr> не найден
     }
 
+    public void readerFromJSON(String filename) {
+        try {
+            // Чтение содержимого файла в строку
+            String content = new String(Files.readAllBytes(Paths.get(filename)));
 
+            // Парсинг JSON
+            JSONObject jsonObject = new JSONObject(content);
+            str = jsonObject.getString("expr").trim(); // Получаем выражение из ключа "expr"
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            str = "Ошибка при чтении файла.";
+        }
+    }
 
     public void readerFromYAML(String fileIn) {
         Yaml yaml = new Yaml();
