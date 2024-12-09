@@ -51,6 +51,22 @@ public class informationProcessing {
         //operation.evaluateWithRegular();
         //operation.believesWithLib();
         setExpValue(operation.getResExp());
+
+        if(fileIn.equals("output.txt")) {
+            operation.writerToFile(fileOut);
+        }
+        else if(fileIn.equals("output.xml")) {
+            operation.writerToFileXML(fileOut);
+        }
+        else if(fileIn.equals("output.html")) {
+            operation.writeToHtmlFile(fileOut);
+        }
+        else if(fileIn.equals("output.json")) {
+            operation.readerFromJSON(fileIn);
+        }
+        else if(fileIn.equals("output.yaml")) {
+            operation.writeToYamlFile(fileOut);
+        }
         operation.writerToFile(fileOut);
 
         try {

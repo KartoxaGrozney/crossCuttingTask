@@ -16,6 +16,12 @@ import org.w3c.dom.Document; // Использование полного име
 import org.jsoup.Jsoup;
 import javax.xml.parsers.DocumentBuilder; // Для создания W3C Document
 import javax.xml.parsers.DocumentBuilderFactory; // Для создания W3C Document
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -152,6 +158,67 @@ public class MathematicalExpression {
             return;
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void writerToFileXML(String fileName) {
+        try {
+            // Создание документа и корневого элемента
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document document = builder.newDocument();
+
+            // Создание корневого элемента
+            Element rootElement = document.createElement("root");
+            document.appendChild(rootElement);
+
+            // Создание элемента для данных
+            Element dataElement = document.createElement("data");
+            dataElement.appendChild(document.createTextNode(String.valueOf(rez))); // Преобразование double в String
+            rootElement.appendChild(dataElement);
+
+            // Запись документа в XML файл
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            DOMSource source = new DOMSource(document);
+            StreamResult result = new StreamResult(new File(fileName));
+
+            transformer.transform(source, result);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Ошибка при записи в файл.");
+        }
+    }
+
+    public void writeToHtmlFile(String fileName) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            // Записываем HTML-структуру
+            writer.write("<!DOCTYPE html>");
+            writer.write("<html lang=\"ru\">");
+            writer.write("<head>");
+            writer.write("<meta charset=\"UTF-8\">");
+            writer.write("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
+            writer.write("<title>Результат</title>");
+            writer.write("</head>");
+            writer.write("<body>");
+            writer.write("<h1>Результат вычисления</h1>");
+            writer.write("<p>Значение: " + rez + "</p>"); // Записываем значение типа double
+            writer.write("</body>");
+            writer.write("</html>");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Ошибка при записи в файл.");
+        }
+    }
+
+    public void writeToYamlFile(String fileName) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            // Записываем данные в формате YAML
+            writer.write("rez: " + rez); // Пример записи значения
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Ошибка при записи в файл.");
         }
     }
 
