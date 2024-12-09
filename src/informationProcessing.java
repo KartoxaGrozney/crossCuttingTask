@@ -68,17 +68,19 @@ public class informationProcessing {
             operation.writeToYamlFile(fileOut);
         }
 
-        try {
-            AuxiliaryАunctions.archiveFileZip(fileOut, "arch.zip");
-            AuxiliaryАunctions.unzipFile("arch.zip");
-            AuxiliaryАunctions.createRar("archiv.rar", fileOut);
-            AuxiliaryАunctions.unrarFile("archiv.rar", "extractedRar");
-            SecretKey myKey = AuxiliaryАunctions.generateKey();
-            AuxiliaryАunctions.encryptFile(fileOut, myKey);
-            AuxiliaryАunctions.encryptFile("archiv.rar", myKey);
-            AuxiliaryАunctions.decryptFile("output.txt.enc", myKey);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(fileOut.equals("output.txt")) {
+            try {
+                AuxiliaryАunctions.archiveFileZip(fileOut, "arch.zip");
+                AuxiliaryАunctions.unzipFile("arch.zip");
+                AuxiliaryАunctions.createRar("archiv.rar", fileOut);
+                AuxiliaryАunctions.unrarFile("archiv.rar", "extractedRar");
+                SecretKey myKey = AuxiliaryАunctions.generateKey();
+                AuxiliaryАunctions.encryptFile(fileOut, myKey);
+                AuxiliaryАunctions.encryptFile("archiv.rar", myKey);
+                AuxiliaryАunctions.decryptFile("output.txt.enc", myKey);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
