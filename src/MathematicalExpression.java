@@ -224,7 +224,6 @@ public class MathematicalExpression {
 
     public void writeToJsonFile(String fileName) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
-            // Записываем данные в формате JSON
             writer.write("{");
             writer.write("\"rez\": " + rez); // Запись значения
             writer.write("}");

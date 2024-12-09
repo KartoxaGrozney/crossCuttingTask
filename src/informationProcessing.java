@@ -67,7 +67,6 @@ public class informationProcessing {
         else if(fileIn.equals("output.yaml")) {
             operation.writeToYamlFile(fileOut);
         }
-        operation.writerToFile(fileOut);
 
         try {
             AuxiliaryАunctions.archiveFileZip(fileOut, "arch.zip");
