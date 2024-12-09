@@ -62,7 +62,7 @@ public class informationProcessing {
             operation.writeToHtmlFile(fileOut);
         }
         else if(fileIn.equals("output.json")) {
-            operation.readerFromJSON(fileIn);
+            operation.writeToJsonFile(fileOut);
         }
         else if(fileIn.equals("output.yaml")) {
             operation.writeToYamlFile(fileOut);

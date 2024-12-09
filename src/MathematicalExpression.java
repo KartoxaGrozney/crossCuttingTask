@@ -222,6 +222,18 @@ public class MathematicalExpression {
         }
     }
 
+    public void writeToJsonFile(String fileName) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            // Записываем данные в формате JSON
+            writer.write("{");
+            writer.write("\"rez\": " + rez); // Запись значения
+            writer.write("}");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Ошибка при записи в файл.");
+        }
+    }
+
     public void believesWithLib(){
         Expression expression = new ExpressionBuilder(str).build();
         rez = expression.evaluate();
